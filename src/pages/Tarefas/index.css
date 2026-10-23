@@ -1,0 +1,15 @@
+.sectionTarefas{
+    margin: 0 auto;
+    width: 80%;
+}
+
+.tableTarefas{
+    border-collapse: collapse;
+}
+
+.tableTarefas th, td{
+    border-bottom: 1px solid #e2e2e2;
+    height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
