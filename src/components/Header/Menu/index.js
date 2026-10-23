@@ -1,15 +1,15 @@
+import { Link } from 'react-router-dom';
 import './index.css';
 
-function Menu() {
+export function Menu() {
     return (
         <nav className='menu'>
             <ul>
-                <li><a href="">Home</a></li>
-                <li><a href="">Tarefas</a></li>
-                <li><a href="">Responsável</a></li>
-                <li><a href="">Perfil</a></li>
+                <li><Link to = "/">Home</Link></li>
+                <li><Link to = "/tarefas">Tarefas</Link></li>
+                <li><Link to = "/responsaveis">Responsáveis</Link></li>
+                <li><Link to = "/perfil">Perfil</Link></li>
             </ul>
         </nav>
     )
 }
-export default Menu;
