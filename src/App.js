@@ -1,40 +1,21 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
 import './App.css';
-
-import Footer from './components/Footer';
-import Header from './components/Header';
-import { Menu } from './components/Header/Menu';
-
-import { Tarefas } from './pages/Tarefas';
-import { Perfil } from './pages/Perfil';
-import { Responsaveis } from './pages/Responsaveis';
-import { Home } from './pages/Home';
-
-import { DetalheTarefa } from './pages/DetalheTarefa';
-import { EditarTarefa } from './pages/EditarTarefa';
+import { useState } from 'react';
+import { Login } from './components/Login';
+import Home from './Home';
 
 function App() {
-  return (
-   <BrowserRouter>
-    <div>
-      <Header />
-      <Menu />
-      <main className='mainApp'>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/tarefas' element={<Tarefas />} />
-          <Route path='/responsaveis' element={<Responsaveis />} />
-          <Route path='/perfil' element={<Perfil />} />
+  const [isAutenticated, setIsAutenticated] = useState(false);
 
-          <Route path='/detalheTarefa/:id' element={<DetalheTarefa />} />
-          <Route path='/editarTarefa/:id' element={<EditarTarefa />} />
-          <Route path='/excluirTarefa/:id' element={<Home />} />
-        </Routes>
-      </main>
-      <Footer />
+  return (
+    <div>
+      {!isAutenticated ? (
+        // Passamos a função onLoginSuccess para o componente Login atualizar o estado pai
+        <Login onLoginSuccess={() => setIsAutenticated(true)} />
+      ) : (
+        <Home />
+      )}
     </div>
-    </BrowserRouter>
   );
 }
+
 export default App;
