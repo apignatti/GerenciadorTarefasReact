@@ -2,7 +2,7 @@ import { useState } from "react";
 import api from "../../services/api";
 
 export function Login({ onLoginSuccess }) {
-    const [email, setEmail] = useState('rafaelflorindo@hotmail.com');
+    const [email, setEmail] = useState('arthurpignatti@gmail.com');
     const [senha, setSenha] = useState('123456');
 
     const autenticar = async (e) => {
@@ -14,10 +14,15 @@ export function Login({ onLoginSuccess }) {
         }
 
         try {
+
             const response = await api.post('/responsaveis/autenticar', { email, senha });
             console.log("Autenticado com Sucesso!!!", response.data);
+            const token = response.data.token;
 
-            // Avisa o App.js que o login deu certo para mudar a tela
+            const usuario = JSON.stringify(response.data.responsavel);
+            await localStorage.setItem('token', token);
+            await localStorage.setItem('usuario', usuario);
+
             if (onLoginSuccess) {
                 onLoginSuccess();
             }

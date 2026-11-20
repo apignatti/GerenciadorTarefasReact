@@ -2,68 +2,70 @@ import { useState } from 'react';
 import api from '../../services/api';
 import './index.css';
 
-export function CadastrarTarefa(){
+export function CadastrarTarefa() {
     // Inicializamos com string vazia para evitar undefined
     const [titulo, setTitulo] = useState('');
     const [descricao, setDescricao] = useState('');
     const [preco, setPreco] = useState('');
     const [data_limite, setData_limite] = useState('');
-    const [tempo_estimado, setTempo_estimado] = useState('');
-    const [responsavel, setResponsavel] = useState(1);    
+    const [tempo_estimado_horas, setTempo_estimado_horas] = useState('');
+    const [responsavel, setResponsavel] = useState(1);
 
     const cadastrarTarefa = async (e) => {
         e.preventDefault();
 
         // Validação simples
-        if (!titulo || !descricao || !preco || !tempo_estimado || !data_limite || !responsavel) {
+        if (!titulo || !descricao || !preco || !tempo_estimado_horas || !data_limite || !responsavel) {
             alert("Todos os campos são obrigatórios.");
             return;
-        }        
+        }
 
         try {
+            const tokenLogin = await localStorage.getItem('token')
+            if (!tokenLogin) return;
             const resposta = await api.post('/tarefas', {
                 titulo,
                 descricao,
                 preco: Number(preco),
-                tempo_estimado: Number(tempo_estimado),
+                tempo_estimado_horas: Number(tempo_estimado_horas),
                 data_limite,
-                responsavelId: Number(responsavel),
-            });
+                id_responsavel: Number(responsavel),
+            }, {headers:{Authorization: `Bearer ${tokenLogin}` }});
 
             console.log("Sucesso:", resposta.data);
             alert("Tarefa cadastrada com sucesso!");
-            
+
             // Opcional: limpar os campos após o cadastro
             setTitulo('');
             setDescricao('');
             setPreco('');
             setData_limite('');
-            setTempo_estimado('');
+            setTempo_estimado_horas('');
 
         } catch (error) {
             console.error("Erro na requisição:", error);
-           // alert(error.response?.data?.message || "Não foi possível cadastrar a tarefa.");
+            // alert(error.response?.data?.message || "Não foi possível cadastrar a tarefa.");
 
-console.error("Erro completo:", error);
-    if (error.response) {
-        // O servidor respondeu com um status de erro (ex: 400, 422, 500)
-        console.error("Dados do erro:", error.response.data);
-        console.error("Status do erro:", error.response.status);
-        alert(`Erro ${error.response.status}: ${error.response.data?.message || JSON.stringify(error.response.data)}`);
-    } else if (error.request) {
-        // A requisição foi feita mas NENHUMA resposta foi recebida (API fora do ar ou CORS bloqueando o POST)
-        console.error("Nenhuma resposta recebida:", error.request);
-        alert("A API não respondeu. Verifique se o servidor backend está rodando.");
-    } else {
-        // Erro ao configurar a requisição
-        console.error("Erro de configuração:", error.message);
-        alert("Erro ao enviar requisição: " + error.message);
-    }
+            console.error("Erro completo:", error);
+            if (error.response) {
+                // O servidor respondeu com um status de erro (ex: 400, 422, 500)
+                console.error("Dados do erro:", error.response.data);
+                console.error("Status do erro:", error.response.status);
+                alert(`Erro ${error.response.status}: ${error.response.data?.message || JSON.stringify(error.response.data)}`);
+            } else if (error.request) {
+                // A requisição foi feita mas NENHUMA resposta foi recebida (API fora do ar ou CORS bloqueando o POST)
+                console.error("Nenhuma resposta recebida:", error.request);
+                alert("A API não respondeu. Verifique se o servidor backend está rodando.");
+            } else {
+                // Erro ao configurar a requisição
+                console.error("Erro de configuração:", error.message);
+                alert("Erro ao enviar requisição: " + error.message);
+            }
 
         }
     }
 
-    return(
+    return (
         <section>
             <header>
                 <h1>Formulário para Cadastro de Tarefa</h1>
@@ -71,7 +73,7 @@ console.error("Erro completo:", error);
             <div>
                 <form onSubmit={cadastrarTarefa}>
                     <label>Título:</label>
-                    <input 
+                    <input
                         placeholder='Informe o nome: Ex: José da Silva'
                         type='text'
                         value={titulo}
@@ -81,15 +83,15 @@ console.error("Erro completo:", error);
 
                     <label>Descrição:</label>
                     {/* CORRIGIDO: Textarea no React não usa conteúdo interno */}
-                    <textarea 
+                    <textarea
                         placeholder='Descreva a tarefa: Ex: Implementar Database'
                         value={descricao}
                         onChange={e => setDescricao(e.target.value)}
                         required
                     />
-                    
+
                     <label>Preço:</label>
-                    <input 
+                    <input
                         placeholder='Informe o valor: Ex: 0.00'
                         type='number'
                         step='0.01'
@@ -99,19 +101,19 @@ console.error("Erro completo:", error);
                     />
 
                     <label>Data Limite:</label>
-                    <input 
+                    <input
                         type='date'
                         value={data_limite}
                         onChange={e => setData_limite(e.target.value)}
                         required
                     />
-                    
+
                     <label>Tempo Estimado (horas):</label>
-                    <input 
+                    <input
                         placeholder='Ex: 72'
                         type='number'
-                        value={tempo_estimado}
-                        onChange={e => setTempo_estimado(e.target.value)}
+                        value={tempo_estimado_horas}
+                        onChange={e => setTempo_estimado_horas(e.target.value)}
                         required
                     />
 
@@ -123,7 +125,7 @@ console.error("Erro completo:", error);
                     <p>{descricao}</p>
                     <p>{preco}</p>
                     <p>{data_limite}</p>
-                    <p>{tempo_estimado}</p>
+                    <p>{tempo_estimado_horas}</p>
                 </div>
             </div>
         </section>

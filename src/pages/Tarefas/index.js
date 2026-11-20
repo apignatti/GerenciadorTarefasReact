@@ -9,7 +9,11 @@ export function Tarefas() {
 
     const buscarTarefa = async () => {
         try {
-            const resposta = await api.get("/tarefas");
+
+            const tokenLogin = await localStorage.getItem('token')
+            if (!tokenLogin) return ;
+
+            const resposta = await api.get("/tarefas", {headers:{Authorization: `Bearer ${tokenLogin}` }});
             setTarefas(resposta.data);
             console.log(resposta.data);
         } catch (error) {
