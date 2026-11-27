@@ -1,0 +1,11 @@
+.login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.login > * { width: 100%; max-width: 420px; }
+
+.login h1 { text-align: center; color: #2563eb; }

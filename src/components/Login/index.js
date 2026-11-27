@@ -18,6 +18,7 @@ export function Login({ onLoginSuccess }) {
             const response = await api.post('/responsaveis/autenticar', { email, senha });
             console.log("Autenticado com Sucesso!!!", response.data);
             const token = response.data.token;
+            console.log(response.data.token);
 
             const usuario = JSON.stringify(response.data.responsavel);
             await localStorage.setItem('token', token);
